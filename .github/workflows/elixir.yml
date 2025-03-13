@@ -1,4 +1,4 @@
-name: Mix Test
+name: Elixir CI
 
 on:
   push:
@@ -9,27 +9,31 @@ on:
 
 jobs:
   test:
+    name: Build and test
     runs-on: ubuntu-latest
     
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+        
+      - name: Set up Elixir
+        uses: erlef/setup-beam@v1
         with:
-          node-version: '16'
-      
+          elixir-version: '1.14.2' # Specify the Elixir version
+          otp-version: '25.1.2'    # Specify the OTP version
+          
+      - name: Restore dependencies cache
+        uses: actions/cache@v3
+        with:
+          path: deps
+          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
+          restore-keys: ${{ runner.os }}-mix-
+          
       - name: Install dependencies
-        run: npm ci
-      
+        run: mix deps.get
+        
+      - name: Run mix format check
+        run: mix format --check-formatted
+        
       - name: Run mix tests
-        run: npm test
-      
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results
-          path: test-results/
-          retention-days: 7
+        run: mix test
