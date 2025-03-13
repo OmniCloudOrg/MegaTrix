@@ -45,7 +45,7 @@ MegaTrix consists of two main components:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/megatrix.git
+git clone https://github.com/OmniCloudOrg/megatrix.git
 cd megatrix
 
 # Install dependencies
