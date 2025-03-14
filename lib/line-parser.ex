@@ -8,7 +8,7 @@ defmodule LineParser do
     case cmds do
       [time, _msg] ->
         Logger.info("time #{time}")
-        {:ok, cmds}
+        {:true, cmds}
     end
   end
 end

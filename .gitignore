@@ -21,3 +21,9 @@ megatrix-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/
+
+# rust build files.
+/target/
+
+# libdbs directory
+/db/

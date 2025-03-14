@@ -1,0 +1,2 @@
+[workspace]
+members = ["Sub-A-Tron", "libdb"]

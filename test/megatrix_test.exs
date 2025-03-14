@@ -8,6 +8,6 @@ defmodule MegatrixTest do
 
   test "line->cmds list validate test" do
     cmds = LineParser.line_to_cmds("abc xyz")
-    {:ok, _} = LineParser.valid_cmds?(cmds)
+    {:true, _} = LineParser.valid_cmds?(cmds)
   end
 end
