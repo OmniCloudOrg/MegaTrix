@@ -4,26 +4,15 @@ defmodule Megatrix do
   @moduledoc """
   """
 
-
   def start() do
-    Logger.info "Starting up megatrix"
+    Logger.info("Starting up megatrix")
+
+    config()
   end
 
-
-
   def config() do
-    children = [
-      # Starts a worker by calling: Megatrix.Worker.start_link(arg)
-      {Task, fn -> Importer.Importer.start() end},
-      {Task, fn -> Exporter.Exporter.start() end}
+    importer_port = 60000
 
-
-    ]
-
-    # See https://hexdocs.pm/elixir/Supervisor.html
-    # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: Megatrix.Supervisor]
-    Supervisor.start_link(children, opts)
-
+    {:ok, base_importer} = Task.Supervisor.start_child(Megatrix.Importers, fn -> Importer.Importer.start(importer_port) end)
   end
 end

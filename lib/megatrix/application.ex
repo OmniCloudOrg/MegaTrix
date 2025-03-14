@@ -8,8 +8,9 @@ defmodule Megatrix.Application do
   @impl true
   def start(_type, _args) do
     children = [
+      {Task.Supervisor, name: Megatrix.Importers},
       # Starts a worker by calling: Megatrix.Worker.start_link(arg)
-
+      Supervisor.child_spec({Task, fn -> Megatrix.start() end}, restart: :temporary)
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

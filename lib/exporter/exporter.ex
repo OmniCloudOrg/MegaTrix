@@ -1,5 +1,6 @@
 defmodule Exporter.Exporter do
   require Logger
+
   @moduledoc """
   This exports metrics data to someone else in a specific format.
   """
