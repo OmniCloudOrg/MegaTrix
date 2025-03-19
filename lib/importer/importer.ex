@@ -31,18 +31,32 @@ defmodule Importer.Importer do
   end
 
   defp serve(socket) do
-    socket |> read_line() |> write_line()
-
-    serve(socket)
+    case read_line(socket) do
+      {:ok, line} ->
+        write_line(socket, line)
+        serve(socket)
+      {:error, :closed} ->
+        Logger.info("Client disconnected")
+        :ok
+      {:error, reason} ->
+        Logger.error("Error serving client: #{reason}")
+        :ok
+    end
   end
 
   defp read_line(socket) do
-    {:ok, data} = :gen_tcp.recv(socket, 0)
-
-    {socket, data}
+    case :gen_tcp.recv(socket, 0) do
+      {:ok, data} ->
+        {:ok, data}
+      {:error, :closed} ->
+        {:error, :closed}
+      {:error, reason} ->
+        {:error, reason}
+    end
   end
 
-  defp write_line({socket, line}) do
+  defp write_line(socket, line) do
+    Logger.info("Writing line to client: #{line}")
     better_line = "SRV: " <> line
     :gen_tcp.send(socket, better_line)
   end
